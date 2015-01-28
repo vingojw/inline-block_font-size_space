@@ -2,18 +2,20 @@
 
 两个input，通过改变父元素font-size，用js计算他们之间空白的距离。
 
+貌似跟字体也有关系，测试时没有设置字体，也就是默认的字体。
 
+IE全系列
+chrome 39.0.2171.95(64-bit)
+chrome 41.0.2258.2 canary(64-bit)
+这几个趋势差不多。
 
-在firefox 和 chrome 中 font-size：12+ ，而且是偶数的时候 直接除以2就是空白距离，是奇数的时候则是加1再除2。
-比如：
-font-size:12px  间距  12/2 = 6px
-font-size:13px  间距  (13+1)/2 = 7px
+chrome 38.0.2125.8
+liebao 5.2.85.9539
+firefox 34.0.5
+firefox 35.0.1
+这几个趋势差不多。
 
-IE 系列，font-size 在大于6px的时候，差不多是4个一档。
-
-貌似跟字体也有关系，测试的默认的应该是宋体。
-
-回家测了chrome 另外几个版本，貌似又跟IE系列差不多的情况。
+Safari 8.0.2(10600.2.5) 比IE全系列普遍多6像素
 
 [测试链接](http://www.jiweiwei.com/util/inline-block_font-size_space/index.html)
 
