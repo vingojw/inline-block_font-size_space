@@ -15,46 +15,79 @@
 </head>
 
 <body>
-<div id="fz" style="background:#efefef;font-size:100px;">
+<div id="container" style="background:#efefef;font-size:100px;">
     <input type="text" id="text" />
-    <input type="button" id="st" value="文本框输入font-size大小，单位px，或者直接点击文本框用鼠标滚轮控制" />
+    <input type="button" id="btn" value="文本框输入font-size大小，单位px，或者直接点击文本框用鼠标滚轮控制" />
     <div id="res" style="font-size:12px;word-break: break-all;"></div>
     <div id="l" style="font-size: 16px;margin-top: 5px;color: black;">当前浏览器font-size: <span id="fsz"></span>时，文本框与按钮的空白间距：<span id="sp"></span>px</div>
 </div>
-<a href="./chart/index.html">查看各浏览器数据</a>
-
+<a href="./chart/index.html">查看各浏览器数据(字体为默认的时候)</a>
+<div>更换字体:
+<label for=""><input type="radio" onclick="cc.call(this);" name="font" value="Lucida Grande">Lucida Grande</label>
+<label for=""><input type="radio" onclick="cc.call(this)" name="font" value="Tahoma">Tahoma</label>
+<label for=""><input type="radio" onclick="cc.call(this)" name="font" value="Verdana">Verdana</label>
+<label for=""><input type="radio" onclick="cc.call(this)" name="font" value="Arial">Arial</label>
+<label for=""><input type="radio" onclick="cc.call(this)" name="font" value="Sans-Serif">Sans-Serif</label>
+<label for=""><input type="radio" onclick="cc.call(this)" name="font" value="宋体">宋体</label>
+</div>
 <script type="text/javascript">
-var st = document.getElementById('st');
-var text = document.getElementById('text');
-var l = document.getElementById('l');
-var fz = document.getElementById('fz');
-var res = document.getElementById('res');
-var data = {fontSize:[],value:{data:[]}},space;
-function change(fongsize){
-    fsz.innerHTML = fz.style.fontSize =  fongsize + "px";
-    sp.innerHTML = space = st.offsetLeft - text.offsetWidth;
-    data.fontSize.push(fongsize);
-    data.value.data.push(space);
+function v(id){
+    return document.getElementById(id);
 }
+var btn   = v('btn'),
+    text = v('text'),
+    l    = v('l'),
+    container = v('container'),
+    res  = v('res'),
+    data,space;
 
-for (var i = 0; i < 101; i++) {
-    change(i);
-};
- res.innerHTML = JSON.stringify(data);
+init();
+addEvent( text,'mousewheel',changeStyle);
 
-
-st.onclick = function(){
+btn.onclick = function(){
     change(text.value);
 }
+
 text.onkeyup = function(){
     change(text.value);
 }
 
+function init(){
+    data = {fontSize:[],value:{data:[]}};
+    for (var i = 0; i < 101; i++) {
+        change(i);
+    };
+    res.innerHTML = JSON.stringify(data);
+}
 
-</script>
-<script>
-/*监听滚轮*/
-/************************************/
+function cc(){
+    container.style.fontFamily = this.value;
+    init();
+}
+
+//更换font-size
+function change(fongsize){
+    fsz.innerHTML = container.style.fontSize =  fongsize + "px";
+    sp.innerHTML = space = btn.offsetLeft - text.offsetWidth;
+    data.fontSize.push(fongsize);
+    data.value.data.push(space);
+}
+
+//滚轮事件
+function changeStyle(e){
+     stopEvent( e );
+     var delta = getWheelValue(e);
+     delta = Math.ceil(delta);// 解决safari 浏览器下 是小数问题。
+     var target = e.target || e.srcElement;
+     target.value = +target.value+delta;
+     if(target.value >= 0 ){ //IE7 下 container.style.fontSize = "-1px" 会报错
+        change(target.value);
+     }
+     return false;
+}
+
+
+/**************滚轮事件**************/
 //添加
 function addEvent( obj,type,fn ) {
      var isFirefox = typeof document.body.style.MozUserSelect != 'undefined';
@@ -87,23 +120,6 @@ function stopEvent(e) {
      e.returnValue = false;
 }
 /************************************/
-
-addEvent( text,'mousewheel',changeStyle);
-//delEvent( document.body,'mousewheel',changeStyle);//删除滚轮事件
-
-//滚轮事件
-function changeStyle(e){
-     stopEvent( e );
-     var delta = getWheelValue(e);
-     delta = Math.ceil(delta);// 解决safari 浏览器下 是小数问题。
-     var target = e.target || e.srcElement;
-     target.value = +target.value+delta;
-     if(target.value >= 0 ){ //IE7 下 fz.style.fontSize = "-1px" 会报错
-        change(target.value);
-     }
-     return false;
-}
-    </script>
-
+</script>
 </body>
 </html>
